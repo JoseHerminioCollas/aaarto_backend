@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "npx hardhat test",
-    "compile":"npx hardhat compile",
-    "deploy":"npx hardhat ignition deploy ./ignition/modules/Lock.ts --network sepolia",
-    "clean":"npx hardhat clean"
+    "compile": "npx hardhat compile",
+    "deploy": "npx hardhat ignition deploy ./ignition/modules/Lock.ts --network sepolia",
+    "clean": "npx hardhat clean"
   },
   "keywords": [],
   "author": "Jose Herminio Collas",
