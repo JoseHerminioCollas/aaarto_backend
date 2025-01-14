@@ -47,14 +47,14 @@ describe("GLDToken", function () {
     expect(ownerBalance).to.equal(initialOwnerBalance);
   });
 
-  it.skip("Should update balances after transfers", async function () {
-    const initialOwnerBalance = await token.balanceOf(await owner.getAddress());
+  it("Should update balances after transfers", async function () {
+    const initialOwnerBalance: bigint = BigInt(await token.balanceOf(await owner.getAddress()));
 
     await token.transfer(await addr1.getAddress(), ethers.parseUnits("1000", 18));
     await token.transfer(await addr2.getAddress(), ethers.parseUnits("500", 18));
 
     const finalOwnerBalance = await token.balanceOf(await owner.getAddress());
-    expect(finalOwnerBalance).to.equal(initialOwnerBalance.sub(ethers.parseUnits("1500", 18)));
+    expect(finalOwnerBalance).to.equal(initialOwnerBalance - (ethers.parseUnits("1500", 18)));
 
     const addr1Balance = await token.balanceOf(await addr1.getAddress());
     expect(addr1Balance).to.equal(ethers.parseUnits("1000", 18));
