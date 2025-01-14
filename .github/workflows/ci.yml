@@ -1,0 +1,44 @@
+name: Run Tests
+
+on:
+  push:
+    branches:
+      - main
+      - '**'
+  pull_request:
+    branches:
+      - main
+      - '**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install dependencies
+      run: npm install --legacy-peer-deps
+
+    - name: Set environment variables
+      run: |
+        echo "ALCHEMY_API_KEY=fake-alchemy-api-key-1234567890123456" >> $GITHUB_ENV
+        echo "SEPOLIA_PRIVATE_KEY=0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef" >> $GITHUB_ENV
+
+    - name: Set up Hardhat vars
+      run: |
+        npx hardhat vars set ALCHEMY_API_KEY ${{ secrets.ALCHEMY_API_KEY }}
+        npx hardhat vars set SEPOLIA_PRIVATE_KEY ${{ secrets.SEPOLIA_PRIVATE_KEY }}
+
+    - name: Run tests
+      run: npx hardhat test
