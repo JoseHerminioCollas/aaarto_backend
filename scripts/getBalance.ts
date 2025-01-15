@@ -1,7 +1,7 @@
 /** 
  * Use environment variables to provide arguments 
- * export contractAddress=""
- * export account=""
+ * export contractAddress="0xE9Aed56dAa723b2C5c5c00DB9201116fF0642777"
+ * export account="0x4055e5DfA831F70c8D7900eFa44D247997667837"
  * Run the script with hardhat run 
  * npx hardhat run scripts/getBalance.ts --network sepolia 
  */
@@ -12,7 +12,7 @@ async function getBalance(contractAddress: string, account: string) {
   const token = GLDToken.attach(contractAddress);
 
   const balance = await token.balanceOf(account);
-  console.log(`Balance of ${account}: ${ethers.utils.formatUnits(balance, 18)} GLD`);
+  console.log(`Balance of ${account}: ${ethers.formatUnits(balance, 18)} GLD`);
 }
 
 const contractAddress = process.env.contractAddress as string;
