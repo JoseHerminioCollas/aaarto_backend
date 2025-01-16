@@ -4,7 +4,7 @@
  * export to=""
  * export amount=""
  * Run the script with hardhat run 
- * npx hardhat run scripts/transferTokens.ts --network sepolia 
+ * npx hardhat run scripts/transferTokens.ts --network NETWORK_NAME 
  */
 import { ethers } from "hardhat";
 
@@ -12,7 +12,7 @@ async function transferTokens(contractAddress: string, to: string, amount: strin
   const GLDToken = await ethers.getContractFactory("GLDToken");
   const token = GLDToken.attach(contractAddress);
 
-  const tx = await token.transfer(to, ethers.utils.parseUnits(amount, 18));
+  const tx = await token.transfer(to, ethers.parseUnits(amount, 18));
   console.log(`Transferred ${amount} GLD to ${to}. Transaction hash: ${tx.hash}`);
 }
 

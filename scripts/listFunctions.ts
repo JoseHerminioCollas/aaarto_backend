@@ -3,7 +3,7 @@ Use environment variables to provide arguments
 export contractAddress=""
 export contractName=""
 Run the script with hardhat run
-npx hardhat run scripts/list.ts --network sepolia
+npx hardhat run scripts/list.ts --network NETWORK_NAME
  */
 import { ethers } from 'hardhat';
 
