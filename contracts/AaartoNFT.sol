@@ -9,62 +9,77 @@ import {ERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/
 import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
 /// @custom:security-contact aaarto@goatstone.com
-contract Aaarto is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, AccessControl {
+contract Aaarto is
+    ERC721,
+    ERC721Enumerable,
+    ERC721URIStorage,
+    ERC721Burnable,
+    AccessControl
+{
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     uint256 private _nextTokenId;
     bool private mintEnabled;
-    
-    constructor(address defaultAdmin, address minter) ERC721("Aaarto", "AAARTO") {
-        _grantRole(DEFAULT_ADMIN_ROLE, defaultAdmin);
-        _grantRole(MINTER_ROLE, minter);
+
+    event Mint(address indexed owner, uint256 indexed tokenID, string tokenURI);
+
+    constructor() ERC721("Aaarto", "AAARTO") {
+        // Grant the contract deployer the default admin role: it will be able
+        // to grant and revoke any roles
+        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         mintEnabled = true;
     }
 
     function preSafeMint(address to, string memory uri) public {
-        if(!mintEnabled) {
+        if (!mintEnabled) {
             require(hasRole(MINTER_ROLE, msg.sender), "Caller is not a minter");
         }
-        _grantRole(MINTER_ROLE, msg.sender); 
+        _grantRole(MINTER_ROLE, msg.sender);
         safeMint(to, uri);
+        // emit Mint(to, _nextTokenId, uri);
     }
 
-    function safeMint(address to, string memory uri) private onlyRole(MINTER_ROLE) {
+    function safeMint(
+        address to,
+        string memory uri
+    ) private onlyRole(MINTER_ROLE) {
         uint256 tokenId = _nextTokenId++;
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
+        emit Mint(to, tokenId, uri);
     }
 
-    function setMintEnabled(bool enabled) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setMintEnabled(
+        bool enabled
+    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
         mintEnabled = enabled;
     }
 
     // The following functions are overrides required by Solidity.
 
-    function _update(address to, uint256 tokenId, address auth)
-        internal
-        override(ERC721, ERC721Enumerable)
-        returns (address)
-    {
+    function _update(
+        address to,
+        uint256 tokenId,
+        address auth
+    ) internal override(ERC721, ERC721Enumerable) returns (address) {
         return super._update(to, tokenId, auth);
     }
 
-    function _increaseBalance(address account, uint128 value)
-        internal
-        override(ERC721, ERC721Enumerable)
-    {
+    function _increaseBalance(
+        address account,
+        uint128 value
+    ) internal override(ERC721, ERC721Enumerable) {
         super._increaseBalance(account, value);
     }
 
-    function tokenURI(uint256 tokenId)
-        public
-        view
-        override(ERC721, ERC721URIStorage)
-        returns (string memory)
-    {
+    function tokenURI(
+        uint256 tokenId
+    ) public view override(ERC721, ERC721URIStorage) returns (string memory) {
         return super.tokenURI(tokenId);
     }
 
-    function supportsInterface(bytes4 interfaceId)
+    function supportsInterface(
+        bytes4 interfaceId
+    )
         public
         view
         override(ERC721, ERC721Enumerable, ERC721URIStorage, AccessControl)
