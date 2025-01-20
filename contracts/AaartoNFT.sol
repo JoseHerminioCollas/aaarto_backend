@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 // Compatible with OpenZeppelin Contracts ^5.0.0
-pragma solidity ^0.8.22;
+pragma solidity ^0.8.28;
 
 import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
@@ -8,7 +8,7 @@ import {ERC721Burnable} from "@openzeppelin/contracts/token/ERC721/extensions/ER
 import {ERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
-/// @custom:security-contact aaarto@goatstone.com
+/// @custom:security-contact aaarto-security@goatstone.com
 contract Aaarto is
     ERC721,
     ERC721Enumerable,
@@ -19,13 +19,11 @@ contract Aaarto is
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     uint256 private _nextTokenId;
     bool private mintEnabled;
-
-    event Mint(address indexed owner, uint256 indexed tokenID, string tokenURI);
+    event Mint(address indexed to, uint256 indexed tokenID, string tokenURI);
 
     constructor() ERC721("Aaarto", "AAARTO") {
-        // Grant the contract deployer the default admin role: it will be able
-        // to grant and revoke any roles
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _grantRole(MINTER_ROLE, msg.sender);
         mintEnabled = true;
     }
 
@@ -35,22 +33,16 @@ contract Aaarto is
         }
         _grantRole(MINTER_ROLE, msg.sender);
         safeMint(to, uri);
-        // emit Mint(to, _nextTokenId, uri);
     }
 
-    function safeMint(
-        address to,
-        string memory uri
-    ) private onlyRole(MINTER_ROLE) {
+    function safeMint(address to, string memory uri) private onlyRole(MINTER_ROLE) {
         uint256 tokenId = _nextTokenId++;
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
         emit Mint(to, tokenId, uri);
     }
 
-    function setMintEnabled(
-        bool enabled
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setMintEnabled(bool enabled) external onlyRole(DEFAULT_ADMIN_ROLE) {
         mintEnabled = enabled;
     }
 

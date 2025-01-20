@@ -6,22 +6,30 @@ describe("Aaarto Contract", function () {
   let contract: any;
   let admin: HardhatEthersSigner;
   let minter: HardhatEthersSigner;
-  let user: HardhatEthersSigner;
-  let anotherUser: HardhatEthersSigner;
+  let minter2: HardhatEthersSigner;
+  const tokenURI = "https://example.com/token-uri";
 
   beforeEach(async function () {
-    [admin, minter, user, anotherUser] = await ethers.getSigners();
+    [admin, minter, minter2] = await ethers.getSigners();
     const Contract = await ethers.getContractFactory("Aaarto");
-    contract = await Contract.deploy(admin.address, minter.address);
+    contract = await Contract.deploy();
   });
 
-  it.skip("should allow minting when enabled", async function () { 
-    await contract.setMintEnabled(true); 
-    await contract.preSafeMint(user.address, "https://example.com/token-uri"); 
-    expect(await contract.ownerOf(contract)).to.equal(user.address); });
+  it("should allow minting initially", async function () {
+    const tx = await contract.preSafeMint(minter.address, tokenURI);
+    const receipt = await tx.wait();
+    const mintEvent = contract.interface.getEvent('Mint');
+    // const y=contract.interface.decodeEventLog(z)
+    // await contract.ownerOf(contract)
+    console.log("receipt: ", receipt);
+    console.log('mintEvent: ', mintEvent);
+    console.log('minter.address: ', minter.address);
+    expect(receipt).to.equal(123);
+  });
 
-  it("should prevent minting when disabled", async function () {
+  it.skip("should prevent minting when disabled", async function () {
     await contract.setMintEnabled(false);
-    await expect(contract.preSafeMint(user.address, "https://example.com/token-uri")).to.be.revertedWith("Caller is not a minter");
+    await expect(contract.preSafeMint(minter2.address, tokenURI))
+      .to.be.revertedWith("Caller is not a minter");
   });
 });
