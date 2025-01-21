@@ -25,7 +25,7 @@ describe("Aaarto Contract", () => {
       .to.emit(contract, "Mint").withArgs(minter.address, 0, tokenURI);
   });
 
-  it("should have expected minting prevention when disabled", async () => {
+  it("should prevent users without MINTER_ROLE from minting when mintEnabled is false", async () => {
     await contract.connect(owner).setMintEnabled(false);
     await expect(contract.connect(minter).preSafeMint(minter.address, tokenURI))
       .to.be.revertedWith("Caller is not a minter");
@@ -50,6 +50,36 @@ describe("Aaarto Contract", () => {
       await contract.connect(minter).setMintEnabled(false);
     } catch (error) {
       expect(error.message).to.include("AccessControlUnauthorizedAccount");
+    }
+  });
+
+  it("should grant MINTER_ROLE to the minter when mintEnabled is true", async () => {
+    await contract.connect(minter).preSafeMint(minter.address, tokenURI);
+    const hasMinterRole = await contract.hasRole(contract.MINTER_ROLE(), minter.address);
+    expect(hasMinterRole).to.be.true;
+  });
+
+  /**
+    The following tests are
+    for functions that are overrides required by Solidity.
+  */
+
+  it("should return the correct token URI", async () => {
+    await contract.connect(owner).preSafeMint(owner.address, tokenURI);
+    const tokenId = 0;
+    expect(await contract.tokenURI(tokenId)).to.equal(tokenURI);
+  });
+
+  it("should support the required interfaces", async () => {
+    const interfaceIds = [
+      "0x80ac58cd", // ERC721
+      "0x5b5e139f", // ERC721Metadata
+      "0x780e9d63", // ERC721Enumerable
+      "0x01ffc9a7"  // ERC165
+    ];
+
+    for (const interfaceId of interfaceIds) {
+      expect(await contract.supportsInterface(interfaceId)).to.be.true;
     }
   });
 
