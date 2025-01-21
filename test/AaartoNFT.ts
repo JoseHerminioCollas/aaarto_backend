@@ -31,4 +31,11 @@ describe("Aaarto Contract", function () {
     await expect(contract.connect(minter2).preSafeMint(minter2.address, tokenURI))
       .to.be.revertedWith("Caller is not a minter");
   });
+  it("should allow a minter that has previously minted to mint when mintEnabled is false", async () => {
+    await expect(await contract.connect(minter).preSafeMint(minter.address, tokenURI))
+      .to.emit(contract, "Mint").withArgs(minter.address, 0, tokenURI);
+    await contract.connect(owner).setMintEnabled(false);
+    await expect(await contract.connect(minter).preSafeMint(minter.address, tokenURI))
+      .to.emit(contract, "Mint").withArgs(minter.address, 1, tokenURI)
+  })
 });
