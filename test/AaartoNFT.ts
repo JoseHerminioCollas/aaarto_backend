@@ -4,28 +4,27 @@ import { ethers } from "hardhat";
 
 describe("Aaarto Contract", function () {
   let contract: any;
-  let admin: HardhatEthersSigner;
+  let owner: HardhatEthersSigner;
   let minter: HardhatEthersSigner;
   let minter2: HardhatEthersSigner;
-  const tokenURI = "https://example.com/token-uri";
+  const tokenURI = "token-uri";
 
   beforeEach(async function () {
-    [admin, minter, minter2] = await ethers.getSigners();
     const Contract = await ethers.getContractFactory("Aaarto");
     contract = await Contract.deploy();
+    // returns the owner of the contract msg.sender
+    [owner, minter, minter2] = await ethers.getSigners();
+    await contract.waitForDeployment();
   });
 
-  it("should allow minting initially", async function () {
-    const tx = await contract.preSafeMint(minter.address, tokenURI);
-    const receipt = await tx.wait();
-    const mintEvent = contract.interface.getEvent('Mint');
-    // const y=contract.interface.decodeEventLog(z)
-    // await contract.ownerOf(contract)
-    console.log("receipt: ", receipt);
-    console.log('mintEvent: ', mintEvent);
-    console.log('minter.address: ', minter.address);
-    expect(receipt).to.equal(123);
-  });
+  it("should have the expected owner", async () => {
+    await expect(await contract.owner()).to.equal(owner.address)
+  })
+
+  it("should emit a Mint event with expected values", async () => {
+    await expect(contract.preSafeMint(minter.address, tokenURI))
+      .to.emit(contract, "Mint").withArgs(minter.address, 0, tokenURI)
+  })
 
   it.skip("should prevent minting when disabled", async function () {
     await contract.setMintEnabled(false);
