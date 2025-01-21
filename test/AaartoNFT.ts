@@ -26,9 +26,9 @@ describe("Aaarto Contract", function () {
       .to.emit(contract, "Mint").withArgs(minter.address, 0, tokenURI)
   })
 
-  it.skip("should prevent minting when disabled", async function () {
-    await contract.setMintEnabled(false);
-    await expect(contract.preSafeMint(minter2.address, tokenURI))
+  it("should prevent minting when disabled", async function () {
+    await contract.connect(owner).setMintEnabled(false);
+    await expect(contract.connect(minter2).preSafeMint(minter2.address, tokenURI))
       .to.be.revertedWith("Caller is not a minter");
   });
 });
