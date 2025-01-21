@@ -7,6 +7,7 @@ import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {ERC721Burnable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import {ERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 /// @custom:security-contact aaarto-security@goatstone.com
 contract Aaarto is
@@ -14,14 +15,15 @@ contract Aaarto is
     ERC721Enumerable,
     ERC721URIStorage,
     ERC721Burnable,
-    AccessControl
+    AccessControl,
+    Ownable
 {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     uint256 private _nextTokenId;
     bool private mintEnabled;
     event Mint(address indexed to, uint256 indexed tokenID, string tokenURI);
 
-    constructor() ERC721("Aaarto", "AAARTO") {
+    constructor() ERC721("Aaarto", "AAARTO") Ownable(msg.sender) {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(MINTER_ROLE, msg.sender);
         mintEnabled = true;
