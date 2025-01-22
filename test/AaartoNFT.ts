@@ -9,7 +9,7 @@ describe("Aaarto Contract", () => {
   const tokenURI = "token-uri";
 
   beforeEach(async () => {
-    const Contract = await ethers.getContractFactory("Aaarto");
+    const Contract = await ethers.getContractFactory("AaartoNFT");
     contract = await Contract.deploy();
     // returns the owner of the contract msg.sender
     [owner, minter] = await ethers.getSigners();

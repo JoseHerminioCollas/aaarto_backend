@@ -10,7 +10,7 @@ import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 /// @custom:security-contact aaarto-security@goatstone.com
-contract Aaarto is
+contract AaartoNFT is
     ERC721,
     ERC721Enumerable,
     ERC721URIStorage,
