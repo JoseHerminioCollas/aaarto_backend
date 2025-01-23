@@ -1,7 +1,7 @@
 {
     "name": "Aaarto",
     "description": "An NFT from a custom image creater.",
-    "image": "https://gateway.pinata.cloud/ipfs/XXX",
+    "image": "ipfs://bafkreiegvc5ny4k2gukg5kolwydvjt7pbfvcd6yarg66six7mjwwd4rsvu",
     "attributes": [
         {
             "trait_type": "Style",
