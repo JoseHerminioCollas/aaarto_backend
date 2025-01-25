@@ -1,26 +1,15 @@
-/**
-run with node interact.js
-SAMPLE CODE
-IPFS image:
-bafkreiegvc5ny4k2gukg5kolwydvjt7pbfvcd6yarg66six7mjwwd4rsvu
-https://black-adverse-mite-295.mypinata.cloud/ipfs/bafkreiegvc5ny4k2gukg5kolwydvjt7pbfvcd6yarg66six7mjwwd4rsvu
- */
-// import { ethers } from "ethers";
 import { JsonRpcProvider, Wallet, Contract } from "ethers";
-// import AaartoNFTAbi from "../artifacts/contracts/AaartoNFT.sol/AaartoNFT.json";
-import contractArtifact from '../artifacts/contracts/AaartoNFT.sol/AaartoNFT.json'; 
-const AaartoNFTAbi = contractArtifact.abi;
+import contractArtifact from '../artifacts/contracts/AaartoNFT.sol/AaartoNFT.json';
 
-// console.log("ABI Content:", JSON.stringify(AaartoNFTAbi, null, 2));
-
-const WALLET_PRIVATE_KEY = (process.env.WALLET_PRIVATE_KEY || "").trim();
+const WALLET_PRIVATE_KEY = process.env.WALLET_PRIVATE_KEY || "";
 const ALCHEMY_SEPOLIA_API_URL = process.env.ALCHEMY_SEPOLIA_API_URL || "";
 
+const AaartoNFTAbi = contractArtifact.abi;
 const provider = new JsonRpcProvider(ALCHEMY_SEPOLIA_API_URL);
 const signer = new Wallet(WALLET_PRIVATE_KEY, provider);
 const contractAddress = "0x85DC05D8fCd6602d7e410A5687ff634D38726215";
 const AaartoNFTContract = new Contract(contractAddress, AaartoNFTAbi, signer);
-const ipfsTokenURI = "ipfs://bafkreigdp2mbtobilxspcw34gl57e6zkd744k644wexo4rchs7zpfqrm7q";
+const ipfsTokenURI = "ipfs://bafkreiesuxfdkg7fz2zacjum5y37cjopavm5s3uwmtrwgsjjnufz46t7om";
 
 const mintNFT = async () => {
   const tx = await AaartoNFTContract.preSafeMint(signer.address, ipfsTokenURI);
