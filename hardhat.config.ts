@@ -1,6 +1,7 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 import "@nomicfoundation/hardhat-chai-matchers";
+require('dotenv').config()
 
 const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY || "";
 const SEPOLIA_PRIVATE_KEY = process.env.SEPOLIA_PRIVATE_KEY || "";
@@ -10,7 +11,7 @@ const config: HardhatUserConfig = {
   networks: {
     sepolia: {
       url: `https://eth-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
-      accounts: ['SEPOLIA_PRIVATE_KEY']
+      accounts: [SEPOLIA_PRIVATE_KEY]
     }
   },
 };
