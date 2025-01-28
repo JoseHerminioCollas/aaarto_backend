@@ -1,0 +1,11 @@
+{
+    "name": "Aaarto",
+    "description": "An NFT from a custom image creater.",
+    "image": "ipfs://bafkreiforuvc5byeh6p45egx2pbr3n2zasnjvfusetjibtbhqhpococmka",
+    "attributes": [
+        {
+            "trait_type": "Style",
+            "value": "Simple"
+        }
+    ]
+}
