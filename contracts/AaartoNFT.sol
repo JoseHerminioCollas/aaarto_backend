@@ -22,15 +22,31 @@ contract AaartoNFT is
   uint256 private _nextTokenId;
   bool private mintEnabled;
   event Mint(address indexed to, uint256 indexed tokenID, string tokenURI);
+  uint256 public platformFee; // Platform fee in wei
+  address payable public feeRecipient; // Address to receive the platform fee
 
-  constructor() ERC721("Aaarto", "AAARTO") Ownable(msg.sender) {
+  constructor(uint256 _platformFee) ERC721("Aaarto", "AAARTO") Ownable(msg.sender) {
     _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
     _grantRole(MINTER_ROLE, msg.sender);
+    platformFee = _platformFee; // Set the platform fee during contract deployment
     mintEnabled = true;
   }
 
-  function preSafeMint(address to, string memory uri) public {
+  function preSafeMint(address to, string memory uri) external payable {
     require(mintEnabled || owner() == msg.sender, "Minting not enabled currently");
+
+    // Check if the sent value matches or exceeds the platform fee
+    require(msg.value >= platformFee, "Insufficient platform fee");
+
+    // Transfer the platform fee to the fee recipient
+    feeRecipient.transfer(msg.value);
+
+    // Refund any excess amount sent
+    if (msg.value > platformFee) {
+      payable(msg.sender).transfer(msg.value - platformFee);
+    }
+
+    // Grant the sender the MINTER_ROLE
     _grantRole(MINTER_ROLE, msg.sender);
     safeMint(to, uri);
   }
@@ -44,6 +60,14 @@ contract AaartoNFT is
 
   function setMintEnabled(bool enabled) external onlyRole(DEFAULT_ADMIN_ROLE) {
     mintEnabled = enabled;
+  }
+
+  function setPlatformFee(uint256 _platformFee) external onlyOwner {
+    platformFee = _platformFee;
+  }
+
+  function setFeeRecipient(address payable _feeRecipient) external onlyOwner {
+    feeRecipient = _feeRecipient;
   }
 
   // The following functions are overrides required by Solidity.
