@@ -30,9 +30,7 @@ contract AaartoNFT is
   }
 
   function preSafeMint(address to, string memory uri) public {
-    if (!mintEnabled) {
-      require(hasRole(MINTER_ROLE, msg.sender), "Caller is not a minter");
-    }
+    require(mintEnabled || owner() == msg.sender, "Minting not enabled currently");
     _grantRole(MINTER_ROLE, msg.sender);
     safeMint(to, uri);
   }
