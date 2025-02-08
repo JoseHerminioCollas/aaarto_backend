@@ -1,19 +1,22 @@
 const { ethers } = require("hardhat");
+import config from "./config.json";
 
-async function main() {
-  const contractAddress = "0x476e4346B8D24D380708bd5Ad689f0847b5feb33"; // Replace with your contract address
-  const NFT = await ethers.getContractAt("AaartoNFTV2", contractAddress);
-
-  console.log("NFT contract deployed at:", NFT.address);
+const main = async (contractAddress: string, contractName: string) => {
+  const NFT = await ethers.getContractAt(contractName, contractAddress);
+  console.log("NFT contract deployed at:", NFT.target);
 
   // Interact with the contract
   const platformFee = await NFT.platformFee();
   console.log("Platform Fee:", platformFee.toString());
 }
 
-main()
+main(config.contractAddress, config.contractName)
   .then(() => process.exit(0))
   .catch((error) => {
     console.error(error);
     process.exit(1);
   });
+
+  // npx hardhat node
+  // npx hardhat ignition deploy ignition/modules/AaartoNFTModuleV4.ts --network localhost
+  // npx hardhat run --network localhost scripts/platformFee.ts
