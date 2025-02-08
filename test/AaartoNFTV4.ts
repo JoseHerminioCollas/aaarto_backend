@@ -2,6 +2,9 @@ import { HardhatEthersSigner } from "@nomicfoundation/hardhat-ethers/signers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
+const platformFee = "0.001"; // Platform fee in wei
+const parsedPlatformFee = ethers.parseEther(platformFee)
+
 describe("Aaarto Contract", () => {
   let contract: any;
   let owner: HardhatEthersSigner;
@@ -10,13 +13,21 @@ describe("Aaarto Contract", () => {
 
   beforeEach(async () => {
     const Contract = await ethers.getContractFactory("AaartoNFTV4");
-    const platformFee = "0.001"; // Platform fee in wei
 
-    contract = await Contract.deploy(ethers.parseEther(platformFee));
+    contract = await Contract.deploy(parsedPlatformFee);
     // returns the owner of the contract msg.sender
     [owner, minter] = await ethers.getSigners();
     await contract.waitForDeployment();
   });
+
+  it("should have the expected platformFee", async () => {
+    const pf = await contract.platformFee()
+    expect(pf).to.equal(parsedPlatformFee);
+  })
+
+  it("should have the expected feeRecipient", async () => {
+    expect(await contract.feeRecipient()).to.equal(owner.address);
+  })
 
   it("should have the expected owner", async () => {
     await expect(await contract.owner()).to.equal(owner.address);
