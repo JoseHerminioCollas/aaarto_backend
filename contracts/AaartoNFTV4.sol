@@ -39,10 +39,6 @@ contract AaartoNFTV4 is
     require(msg.value >= platformFee, "Insufficient platform fee");
     // Transfer the platform fee to the fee recipient
     feeRecipient.transfer(msg.value);
-    // Refund any excess amount sent
-    if (msg.value > platformFee) {
-      payable(msg.sender).transfer(msg.value - platformFee);
-    }
     // Grant the sender the MINTER_ROLE
     _grantRole(MINTER_ROLE, msg.sender);
     safeMint(to, uri);
