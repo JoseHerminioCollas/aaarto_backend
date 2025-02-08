@@ -10,7 +10,7 @@ import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 /// @custom:security-contact aaarto-security@goatstone.com
-contract AaartoNFTV3 is
+contract AaartoNFTV4 is
   ERC721,
   ERC721Enumerable,
   ERC721URIStorage,
@@ -29,23 +29,20 @@ contract AaartoNFTV3 is
     _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
     _grantRole(MINTER_ROLE, msg.sender);
     platformFee = _platformFee; // Set the platform fee during contract deployment
+    feeRecipient = payable(msg.sender); // Set the initial fee recipient to the contract deployer
     mintEnabled = true;
   }
 
   function preSafeMint(address to, string memory uri) external payable {
     require(mintEnabled || owner() == msg.sender, "Minting not enabled currently");
-
     // Check if the sent value matches or exceeds the platform fee
     require(msg.value >= platformFee, "Insufficient platform fee");
-
     // Transfer the platform fee to the fee recipient
     feeRecipient.transfer(msg.value);
-
     // Refund any excess amount sent
     if (msg.value > platformFee) {
       payable(msg.sender).transfer(msg.value - platformFee);
     }
-
     // Grant the sender the MINTER_ROLE
     _grantRole(MINTER_ROLE, msg.sender);
     safeMint(to, uri);
