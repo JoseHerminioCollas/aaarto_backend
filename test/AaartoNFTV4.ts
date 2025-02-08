@@ -6,6 +6,7 @@ import { ethers } from "hardhat";
 describe("Aaarto Contract", () => {
   let contract: any;
   let owner: HardhatEthersSigner;
+  let newFeeRecipient: HardhatEthersSigner;
   let minter: HardhatEthersSigner;
   const tokenURI = "token-uri";
   const platformFee = "0.001"; // Platform fee in wei
@@ -15,10 +16,17 @@ describe("Aaarto Contract", () => {
     const Contract = await ethers.getContractFactory("AaartoNFTV4");
     contract = await Contract.deploy(parsedPlatformFee);
     // returns the owner of the contract msg.sender
-    [owner, minter] = await ethers.getSigners();
+    [owner, minter, newFeeRecipient] = await ethers.getSigners();
     await contract.waitForDeployment();
   });
-
+  
+  it("should set feeRecipient to the expected user", async () => {
+    const expectedFeeRecipient = newFeeRecipient.address;
+    await contract.connect(owner).setFeeRecipient(expectedFeeRecipient)
+    const actualFeeRecipient = await contract.feeRecipient();
+    expect(actualFeeRecipient).to.equal(expectedFeeRecipient)
+  })
+  
   it("should set platformFee to expected value", async () => {
     const expectedPlatformFee = ethers.parseEther("0.1")
     await contract.connect(owner).setPlatformFee(expectedPlatformFee)
