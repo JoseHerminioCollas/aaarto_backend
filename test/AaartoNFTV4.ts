@@ -19,14 +19,24 @@ describe("Aaarto Contract", () => {
     [owner, minter, newFeeRecipient] = await ethers.getSigners();
     await contract.waitForDeployment();
   });
-  
+
+  it("should revert with insufficient platformFee", async () => {
+    const platformFee = "0.0001";
+    const parsedPlatformFee = ethers.parseEther(platformFee);
+    await expect(contract.preSafeMint(minter.address, tokenURI,
+      {
+        value: parsedPlatformFee
+      }
+    )).to.revertedWith('Insufficient platform fee')
+  })
+
   it("should set feeRecipient to the expected user", async () => {
     const expectedFeeRecipient = newFeeRecipient.address;
     await contract.connect(owner).setFeeRecipient(expectedFeeRecipient)
     const actualFeeRecipient = await contract.feeRecipient();
     expect(actualFeeRecipient).to.equal(expectedFeeRecipient)
   })
-  
+
   it("should set platformFee to expected value", async () => {
     const expectedPlatformFee = ethers.parseEther("0.1")
     await contract.connect(owner).setPlatformFee(expectedPlatformFee)
