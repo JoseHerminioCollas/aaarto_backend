@@ -28,7 +28,7 @@ describe("Aaarto Contract", () => {
   it("should prevent users without MINTER_ROLE from minting when mintEnabled is false", async () => {
     await contract.connect(owner).setMintEnabled(false);
     await expect(contract.connect(minter).preSafeMint(minter.address, tokenURI))
-      .to.be.revertedWith("Minting not enabled currently");
+      .to.be.revertedWith("Caller is not a minter");
   });
 
   it("should always allow the owner to mint", async () => {
