@@ -5,8 +5,10 @@ const main = async (contractAddress: string, contractName: string) => {
   const NFT = await ethers.getContractAt("AaartoNFTV4", contractAddress);
   console.log("NFT contract deployed at:", NFT.target);
 
-  const returnSetFeeRecipient = await NFT.setFeeRecipient(config.account1);
-  console.log("returnSetFeeRecipient:", returnSetFeeRecipient );
+  console.log("setting fee recipient : account1:", config.account1 );
+  await NFT.setFeeRecipient(config.account1);
+  const currentFeeRecipient = await NFT.feeRecipient();
+  console.log("Current fee recipient:", currentFeeRecipient);
 }
 
 main(config.contractAddress, config.contractName)
