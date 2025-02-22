@@ -1,6 +1,9 @@
-// checkFeeRecipient.ts
+// getFeeRecipient.ts
 import { ethers } from 'hardhat';
-import config from "./config.json";
+import config_local from "./config_local.json";
+import config_sepolia from "./config_sepolia.json";
+
+const config = config_local;
 
 const main = async (contractAddress: string, contractName: string) => {
   console.log('Contract address:', contractAddress);

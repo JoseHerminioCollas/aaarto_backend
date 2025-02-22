@@ -1,3 +1,4 @@
+// getPlatformFee.ts
 const { ethers } = require("hardhat");
 import config_local from "./config_local.json";
 import config_sepolia from "./config_sepolia.json";
