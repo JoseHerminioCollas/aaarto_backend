@@ -1,5 +1,8 @@
 const { ethers } = require("hardhat");
-import config from "./config.json";
+import config_local from "./config_local.json";
+import config_sepolia from "./config_sepolia.json";
+
+const config = config_local;
 
 const main = async (contractAddress: string, contractName: string) => {
   const NFT = await ethers.getContractAt(contractName, contractAddress);
@@ -8,7 +11,7 @@ const main = async (contractAddress: string, contractName: string) => {
   // Interact with the contract
   const platformFee = await NFT.platformFee();
   console.log("Platform Fee:", platformFee.toString());
-}
+};
 
 main(config.contractAddress, config.contractName)
   .then(() => process.exit(0))
