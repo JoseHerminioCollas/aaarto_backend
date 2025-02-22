@@ -17,6 +17,14 @@ main(config.contractAddress, config.contractName)
     process.exit(1);
   });
 
-  // npx hardhat node
-  // npx hardhat ignition deploy ignition/modules/AaartoNFTModuleV4.ts --network localhost
-  // npx hardhat run --network localhost scripts/platformFee.ts
+// npx hardhat node
+// npx hardhat ignition deploy ignition/modules/AaartoNFTModuleV4.ts --network localhost
+// npx hardhat run --network localhost scripts/platformFee.ts
+
+// sepolia
+// 0x96de1d7b02363Ff5b6F719791363189e4E629098
+// "contractName": "AaartoNFTV4",
+
+// local net
+// 0x5FbDB2315678afecb367f032d93F642f64180aa3
+//   "contractName": "AaartoNFTV4",
