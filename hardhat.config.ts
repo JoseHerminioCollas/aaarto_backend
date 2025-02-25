@@ -4,7 +4,7 @@ import "@nomicfoundation/hardhat-chai-matchers";
 require('dotenv').config()
 
 const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY || "";
-const SEPOLIA_PRIVATE_KEY = process.env.SEPOLIA_PRIVATE_KEY || "";
+const PRIVATE_KEY = process.env.PRIVATE_KEY || "";
 
 const config: HardhatUserConfig = {
   solidity: "0.8.28",
@@ -14,8 +14,16 @@ const config: HardhatUserConfig = {
     },
     sepolia: {
       url: `https://eth-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
-      accounts: [SEPOLIA_PRIVATE_KEY]
-    }
+      accounts: [PRIVATE_KEY]
+    },
+    polygon: {
+      url: "https://polygon-rpc.com/",
+      accounts: [PRIVATE_KEY],
+    },
+    polygon_amoy: {
+      url: "https://rpc-amoy.polygon.technology/",
+      accounts: [PRIVATE_KEY],
+    },
   },
 };
 

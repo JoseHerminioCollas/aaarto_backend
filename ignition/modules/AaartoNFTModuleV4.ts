@@ -11,3 +11,10 @@ const AaartoNFTModuleV4 = buildModule("AaartoNFTModuleV4", (m) => {
 });
 
 export default AaartoNFTModuleV4;
+
+// npx hardhat node
+// npx hardhat ignition deploy ignition/modules/AaartoNFTModuleV4.ts --network localhost
+// npx hardhat ignition deploy ignition/modules/AaartoNFTModuleV3.ts --network sepolia
+// npx hardhat ignition deploy ignition/modules/AaartoNFTModuleV4.ts --network polygon
+// npx hardhat ignition deploy ignition/modules/AaartoNFTModuleV4.ts --network polygon_amoy
+// npx hardhat run --network localhost scripts/setPlatformFee.ts
