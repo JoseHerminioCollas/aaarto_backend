@@ -1,11 +1,12 @@
 /**
-Use environment variables to provide arguments
-export contractAddress=""
-export contractName=""
 Run the script with hardhat run
 npx hardhat run scripts/list.ts --network NETWORK_NAME
  */
 import { ethers } from 'hardhat';
+import config_local from "./config_local.json";
+import config_sepolia from "./config_sepolia.json";
+
+const config = config_local;
 
 async function listFunctions(contractAddress: string, contractName: string) {
     console.log('Contract address:', contractAddress);
@@ -26,7 +27,7 @@ async function listFunctions(contractAddress: string, contractName: string) {
 
 }
 
-listFunctions(process.env.contractAddress as string, process.env.contractName as string)
+listFunctions(config.contractAddress, config.contractName)
     .then(() => process.exit(0)).catch((error) => {
         console.error(error);
         process.exit(1);
