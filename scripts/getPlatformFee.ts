@@ -11,7 +11,11 @@ const main = async (contractAddress: string, contractName: string) => {
 
   // Interact with the contract
   const platformFee = await NFT.platformFee();
+  const platformFeeInEther = ethers.formatEther(platformFee);
   console.log("Platform Fee:", platformFee.toString());
+
+  console.log("Platform Fee (in wei):", platformFee.toString());
+  console.log("Platform Fee (in Ether):", platformFeeInEther);
 };
 
 main(config.contractAddress, config.contractName)
