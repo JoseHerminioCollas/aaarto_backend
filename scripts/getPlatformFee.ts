@@ -1,9 +1,9 @@
 // getPlatformFee.ts
 const { ethers } = require("hardhat");
 import config_local from "./config_local.json";
-import config_sepolia from "./config_sepolia.json";
+import config_polgon from "./config_polygon.json";
 
-const config = config_local;
+const config = config_polgon;
 
 const main = async (contractAddress: string, contractName: string) => {
   const NFT = await ethers.getContractAt(contractName, contractAddress);
@@ -23,7 +23,7 @@ main(config.contractAddress, config.contractName)
 
 // npx hardhat node
 // npx hardhat ignition deploy ignition/modules/AaartoNFTModuleV4.ts --network localhost
-// npx hardhat run --network localhost scripts/platformFee.ts
+// npx hardhat run --network polygon scripts/getPlatformFee.ts
 
 // sepolia
 // 0x96de1d7b02363Ff5b6F719791363189e4E629098
