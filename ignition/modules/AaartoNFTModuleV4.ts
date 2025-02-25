@@ -18,3 +18,6 @@ export default AaartoNFTModuleV4;
 // npx hardhat ignition deploy ignition/modules/AaartoNFTModuleV4.ts --network polygon
 // npx hardhat ignition deploy ignition/modules/AaartoNFTModuleV4.ts --network polygon_amoy
 // npx hardhat run --network localhost scripts/setPlatformFee.ts
+
+// polygon contract owner 0x36708B00D26Da1a6068577cD009732b79926AaCd
+// contract address 0x03a9423E9Aac42E9F991D292F8e074808D9ABE7f
