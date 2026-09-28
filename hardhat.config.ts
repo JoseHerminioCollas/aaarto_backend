@@ -5,6 +5,8 @@ require('dotenv').config()
 
 const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY || "";
 const PRIVATE_KEY = process.env.PRIVATE_KEY || "";
+// An empty key makes Hardhat reject the whole config (HH8), so only set accounts when a key exists
+const accounts = PRIVATE_KEY ? [PRIVATE_KEY] : [];
 
 const config: HardhatUserConfig = {
   solidity: "0.8.28",
@@ -14,15 +16,15 @@ const config: HardhatUserConfig = {
     },
     sepolia: {
       url: `https://eth-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
-      accounts: [PRIVATE_KEY]
+      accounts,
     },
     polygon: {
       url: "https://polygon-rpc.com/",
-      accounts: [PRIVATE_KEY],
+      accounts,
     },
     polygon_amoy: {
       url: "https://rpc-amoy.polygon.technology/",
-      accounts: [PRIVATE_KEY],
+      accounts,
     },
   },
 };
